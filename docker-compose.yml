@@ -1,0 +1,68 @@
+services:
+  fastapi-app:
+    build: .
+    image: fastapiapp:latest
+    container_name: python-head
+    volumes:
+      - fastapi_vol:/app/
+      - ./src:/code
+    ports:
+      - 8000:8000
+    restart: unless-stopped
+    networks:
+      - llm-agent
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - 11434:11434
+    volumes:
+      - ollama_vol:/root/.ollama
+    pull_policy: always
+    tty: true
+    restart: unless-stopped
+    environment:
+      - OLLAMA_HOST=0.0.0.0
+    networks:
+      - llm-agent
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: qdrant
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant_vol:/qdrant/storage
+    environment:
+      - QDRANT_STORAGE_PATH=/qdrant/storage
+    restart: unless-stopped
+    networks:
+      - llm-agent
+
+  postgres:
+    image: postgres:12
+    container_name: postgres
+    volumes:
+      - postgres_vol:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=n8n
+      - POSTGRES_PASSWORD=n8n
+      - POSTGRES_DB=n8n
+    restart: unless-stopped  
+    networks:
+      - llm-agent
+
+volumes:
+  fastapi_vol:
+    external: false
+  ollama_vol:
+    external: false
+  qdrant_vol:
+    external: false
+  postgres_vol:
+    external: false
+
+networks:
+  llm-agent:
+    external: false
