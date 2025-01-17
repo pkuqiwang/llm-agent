@@ -1,0 +1,16 @@
+from langchain_ollama import ChatOllama
+from langchain_core.messages import AIMessage
+from langchain_core.messages import HumanMessage, SystemMessage
+from langchain_openai import ChatOpenAI
+
+model = ChatOpenAI(
+    model="llama3.2:3b", 
+    base_url='http://ollama:11434/v1', 
+    api_key='ollama')
+
+messages = [
+    SystemMessage("Translate the following from English into Italian"),
+    HumanMessage("hi!"),
+]
+
+returnMsg = model.invoke(messages)
