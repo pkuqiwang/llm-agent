@@ -13,7 +13,7 @@ services:
       - llm-agent
 
   ollama:
-    image: ollama/ollama:latest
+    image: ollama/ollama:0.5.7
     container_name: ollama
     ports:
       - 11434:11434
