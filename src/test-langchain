@@ -1,5 +1,3 @@
-from langchain_ollama import ChatOllama
-from langchain_core.messages import AIMessage
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_openai import ChatOpenAI
 
@@ -14,3 +12,5 @@ messages = [
 ]
 
 returnMsg = model.invoke(messages)
+
+print(returnMsg.content)

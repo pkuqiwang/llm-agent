@@ -5,5 +5,5 @@ nest-asyncio
 qdrant-client
 ollama
 langchain
-langchain-ollama
 langchain-openai
+weaviate-client
