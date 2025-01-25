@@ -4,6 +4,11 @@ pydantic-ai
 nest-asyncio
 qdrant-client
 ollama
+weaviate-client
 langchain
 langchain-openai
-weaviate-client
+langchain-community 
+langchain_ollama
+langchain-weaviate
+langchain-qdrant
+pypdf

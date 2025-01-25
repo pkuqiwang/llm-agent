@@ -6,6 +6,7 @@ services:
     volumes:
       - fastapi_vol:/app/
       - ./src:/code
+      - ./data:/data
     ports:
       - 8000:8000
     restart: unless-stopped
@@ -15,8 +16,6 @@ services:
   ollama:
     image: ollama/ollama:0.5.7
     container_name: ollama
-    ports:
-      - 11434:11434
     volumes:
       - ollama_vol:/root/.ollama
     pull_policy: always
