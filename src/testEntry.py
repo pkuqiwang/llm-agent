@@ -3,4 +3,5 @@ from testPydanticai import *
 from testQdrant import *
 from testWeaviate import *
 
-vectorQueryQdrant()
+#vectorLoadingWeaviate()
+vectorQueryWeaviate()

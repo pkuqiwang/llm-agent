@@ -91,6 +91,48 @@ def fileLoadingWeaviate():
 
     weaviate_client.close()
 
+#test vector loading to Weaviate
+def vectorLoadingWeaviate():
+    all_splits = fileLoadSplitter()
+    embeddings = OllamaEmbeddings(
+        model="nomic-embed-text:latest",
+        base_url='http://ollama:11434',
+    )
+    weaviate_client = weaviate.connect_to_local(host="weaviate", port=8080)
+
+    vector_store = WeaviateVectorStore(
+        client=weaviate_client,
+        index_name="test_index",
+        text_key="test_key", 
+        embedding=embeddings, 
+    )    
+    vector_store.add_documents(documents=all_splits)
+    weaviate_client.close()
+
+#test vector query to Weaviate
+def vectorQueryWeaviate():
+    embeddings = OllamaEmbeddings(
+        model="nomic-embed-text:latest",
+        base_url='http://ollama:11434',
+    )
+    weaviate_client = weaviate.connect_to_local(host="weaviate", port=8080)
+    vector_store = WeaviateVectorStore(
+        client=weaviate_client,
+        index_name="test_index",
+        text_key="test_key", 
+        embedding=embeddings, 
+    )    
+    
+    query = "How does self-supervised training work in LLM?"
+    docs = vector_store.similarity_search(query)
+
+    # Print the first 100 characters of each result
+    for i, doc in enumerate(docs):
+        print(f"\nDocument {i+1}:")
+        print(doc.page_content)
+
+    weaviate_client.close()
+
 #test file loading to Qdrant
 def vectorLoadingQdrant():
     all_splits = fileLoadSplitter()

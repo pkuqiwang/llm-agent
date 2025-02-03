@@ -14,7 +14,7 @@ def testLoadWeaviate():
                 name="title",
                 source_properties=["title"],
                 base_url="http://ollama:11434", #don't include /v1 in the base url
-                model="snowflake-arctic-embed", 
+                model="nomic-embed-text:latest", 
             )
         ],
     )
