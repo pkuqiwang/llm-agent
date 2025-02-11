@@ -1,5 +1,3 @@
-fastapi
-uvicorn
 pydantic-ai
 nest-asyncio
 qdrant-client

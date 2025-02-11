@@ -1,31 +1,36 @@
 import weaviate
 from weaviate.classes.config import Configure
+from testLangchain import fileLoadSplitter
 
 def testLoadWeaviate():
-    client = weaviate.connect_to_local(host="weaviate", port=8080)
-
-    if client.collections.exists("test_collection"):
-        client.collections.delete("test_collection")
+    all_splits = fileLoadSplitter()
+    client = weaviate.connect_to_local(host="127.0.0.1",  
+                                       port=8080,
+                                       grpc_port=50051,
+                                       )
+    collection_name = "llmtest"
+    text_key = "weaviatetestkey"
+    if client.collections.exists(collection_name):
+        client.collections.delete(collection_name)
 
     client.collections.create(
-        "test_collection",
+        collection_name,
         vectorizer_config=[
-            Configure.NamedVectors.text2vec_openai(
-                name="title",
-                source_properties=["title"],
-                base_url="http://ollama:11434", #don't include /v1 in the base url
-                model="nomic-embed-text:latest", 
+            Configure.NamedVectors.text2vec_ollama(
+                name="nomic",
+                source_properties=["ollam"],
+                api_endpoint="http://ollama:11434",  #must use ollama as this is inside docker network, don't use localhost
+                model="nomic-embed-text:latest",                 
             )
         ],
     )
 
-    collection = client.collections.get("test_collection")
-
+    collection = client.collections.get(collection_name)
     data_rows = [{"title": f"Object {i+1}"} for i in range(5)]
     with collection.batch.dynamic() as batch:
-        for data_row in data_rows:
+        for data in all_splits:
             batch.add_object(
-                properties=data_row,
+                properties = {text_key: data.page_content,},
             )
 
     for item in collection.iterator():

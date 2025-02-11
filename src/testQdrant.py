@@ -5,9 +5,9 @@ from qdrant_client.http.models import PointStruct
 
 
 def testLoadQdrant():
-  ollamaClient = Client(host='http://ollama:11434')
+  ollamaClient = Client(host='http://localhost:11434')
 
-  qdrantClient = QdrantClient(url="http://qdrant:6333")
+  qdrantClient = QdrantClient(url="http://127.0.0.1:6333")
   collection_name = "test_collection"
   if not qdrantClient.collection_exists(collection_name):
     qdrantClient.create_collection(

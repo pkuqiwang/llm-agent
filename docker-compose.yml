@@ -1,23 +1,11 @@
 services:
-  fastapi-app:
-    build: .
-    image: fastapiapp:latest
-    container_name: python-head
-    volumes:
-      - fastapi_vol:/app/
-      - ./src:/code
-      - ./data:/data
-    ports:
-      - 8000:8000
-    restart: unless-stopped
-    networks:
-      - llm-agent
-
   ollama:
     image: ollama/ollama:0.5.7
     container_name: ollama
     volumes:
       - ollama_vol:/root/.ollama
+    ports:
+      - 11434:11434
     pull_policy: always
     tty: true
     restart: unless-stopped
@@ -62,6 +50,7 @@ services:
       ENABLE_API_BASED_MODULES: 'true'
       CLUSTER_HOSTNAME: 'node1'
       OPENAI_APIKEY: 'ollama'
+      ENABLE_MODULES: 'text2vec-ollama,generative-ollama'
     networks:
       - llm-agent
 
@@ -79,8 +68,6 @@ services:
       - llm-agent
 
 volumes:
-  fastapi_vol:
-    external: false
   ollama_vol:
     external: false
   qdrant_vol:
